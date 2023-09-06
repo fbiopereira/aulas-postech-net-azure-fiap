@@ -6,7 +6,7 @@ namespace FiapStoreMinimalAPI.Repositories
     public class UsuarioRepository : IUsuarioRepository
     {
 
-        private IList<Usuario> _usuarios = new List<Usuario>();
+        private readonly IList<Usuario> _usuarios = new List<Usuario>();
 
         public IList<Usuario> ObterTodosUsuarios()
         {

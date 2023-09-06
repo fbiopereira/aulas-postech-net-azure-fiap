@@ -1,4 +1,5 @@
-﻿using FiapStore.Entities;
+﻿using FiapStore.DTOs;
+using FiapStore.Entities;
 using FiapStore.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,36 +16,46 @@ namespace FiapStore.Controllers
             _usuarioRepository = usuarioRepository;
         }
 
-        [HttpGet("obter-todos-usuarios")]
+        [HttpGet]
         public IActionResult ObterTodosUsuarios()
         {
-            return Ok(_usuarioRepository.ObterTodosUsuarios());
+            return Ok(_usuarioRepository.ObterTodos());
         }
 
-        [HttpGet("obter-usuario-id/{id:int}")] //Opcao especificando o tipo do parametro
-        public IActionResult ObterUsuarioId(int id)
+        [HttpGet("{id:int}/{pedidos:bool=false}")] //Opcao especificando o tipo do parametro
+        public IActionResult ObterUsuarioId(int id, bool pedidos = false)
         {
-            return Ok(_usuarioRepository.ObterUsuarioPorId(id));
+            if (pedidos) 
+            {
+                return Ok(_usuarioRepository.ObterPorIdComPedidos(id));
+            }
+            else
+            {
+                return Ok(_usuarioRepository.ObterPorId(id));
+            }
         }
+
+     
 
         [HttpPost]
-        public IActionResult CadastrarUsuario([FromBody] Usuario usuario)
+        public IActionResult CadastrarUsuario([FromBody] CadastrarUsuarioDTO usuarioDto)
         {
-            _usuarioRepository.CadastrarUsuario(usuario);
+            
+            _usuarioRepository.Cadastrar(new Usuario(usuarioDto));
             return Ok("Usuário cadastrado com sucesso");
         }
 
         [HttpPut]
-        public IActionResult AlterarUsuario([FromBody] Usuario usuario) //A partir do .Net 7 o FromBody é opcional
-        {
-            _usuarioRepository.AlterarUsuario(usuario);
+        public IActionResult AlterarUsuario([FromBody] AlterarUsuarioDTO usuarioDto) //A partir do .Net 7 o FromBody é opcional
+        {           
+            _usuarioRepository.Alterar(new Usuario(usuarioDto));
             return Ok("Usuário alterado com sucesso");
         }
 
         [HttpDelete("{id}")] //Opcao sem especificar o tipo do parametro
         public IActionResult DeleteUsuario(int id)
         {
-            _usuarioRepository.DeletarUsuario(id);
+            _usuarioRepository.Deletar(id);
             return Ok("Usuário deletado com sucesso");
         }
 

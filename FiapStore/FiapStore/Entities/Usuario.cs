@@ -1,8 +1,24 @@
-﻿namespace FiapStore.Entities
+﻿using FiapStore.DTOs;
+
+namespace FiapStore.Entities
 {
-    public class Usuario
+    public class Usuario : Entidade
     {
-        public int Id { get; set; }
-        public string Nome { get; set; }
+        public string? Nome { get; set; }
+        public ICollection<Pedido>? Pedidos { get; set; }
+
+        public Usuario()
+        {            
+        }
+
+        public Usuario(CadastrarUsuarioDTO cadastrarUsuarioDTO)
+        {
+            Nome = cadastrarUsuarioDTO.Nome;
+        }
+
+        public Usuario(AlterarUsuarioDTO alterarUsuarioDTO)
+        {
+            Nome = alterarUsuarioDTO.Nome;
+        }
     }
 }
