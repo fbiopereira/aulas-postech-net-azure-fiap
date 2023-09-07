@@ -1,3 +1,4 @@
+using FiapStore.Configurations.Logging;
 using FiapStore.Controllers;
 using FiapStore.Interfaces;
 using FiapStore.Repositories;
@@ -13,6 +14,14 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(ServiceLifetime.Scoped);
+
+builder.Logging.ClearProviders();
+builder.Logging.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration() 
+{ 
+
+    LogLevel = LogLevel.Information
+
+}));   
 
 var app = builder.Build();
 

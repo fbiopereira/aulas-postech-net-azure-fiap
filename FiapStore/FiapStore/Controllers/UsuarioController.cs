@@ -2,6 +2,7 @@
 using FiapStore.Entities;
 using FiapStore.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace FiapStore.Controllers
 {
@@ -10,21 +11,40 @@ namespace FiapStore.Controllers
     public class UsuarioController : Controller
     {
         private IUsuarioRepository _usuarioRepository;
+        private readonly ILogger<UsuarioController> _logger;
 
-        public UsuarioController(IUsuarioRepository usuarioRepository)
+        public UsuarioController(IUsuarioRepository usuarioRepository, ILogger<UsuarioController> logger)
         {
             _usuarioRepository = usuarioRepository;
+            _logger = logger;
+
         }
 
         [HttpGet]
         public IActionResult ObterTodosUsuarios()
         {
-            return Ok(_usuarioRepository.ObterTodos());
+            _logger.LogInformation("Listando todos os usuarios");
+            
+            _logger.LogWarning("Warning listando todos os usuarios");
+            try
+            {
+               throw new Exception("Deu Erro");
+                return Ok(_usuarioRepository.ObterTodos());
+            }
+            catch (Exception ex)
+            {
+                _logger.
+                _logger.LogError(ex, ex.Message);
+            }
+
+            return BadRequest();
+            
         }
 
         [HttpGet("{id:int}/{pedidos:bool=false}")] //Opcao especificando o tipo do parametro
         public IActionResult ObterUsuarioId(int id, bool pedidos = false)
         {
+            _logger.LogInformation("Executando ObterUsuarioId com id={id} e pedidos={pedidos}", id, pedidos);
             if (pedidos) 
             {
                 return Ok(_usuarioRepository.ObterPorIdComPedidos(id));

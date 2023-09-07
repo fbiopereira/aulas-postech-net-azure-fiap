@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace FiapStore.Configurations
+namespace FiapStore.Configurations.EntityFramework
 {
     public class UsuarioConfiguration : IEntityTypeConfiguration<Usuario>
     {
