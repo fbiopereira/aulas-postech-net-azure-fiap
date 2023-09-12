@@ -25,5 +25,11 @@ namespace FiapStore.Repositories
                 }).FirstOrDefault();
 
         }
+
+        public Usuario ObterPorNomeUsuarioESenha(string nomeUsuario, string senha)
+        {
+            return _context.Usuario.FirstOrDefault(usuario => 
+            usuario.Senha == senha && usuario.NomeUsuario ==  nomeUsuario); 
+        }
     }
 }
