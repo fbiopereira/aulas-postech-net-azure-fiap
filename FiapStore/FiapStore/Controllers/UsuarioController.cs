@@ -32,8 +32,7 @@ namespace FiapStore.Controllers
                 return Ok(_usuarioRepository.ObterTodos());
             }
             catch (Exception ex)
-            {
-                _logger.
+            {                
                 _logger.LogError(ex, ex.Message);
             }
 
