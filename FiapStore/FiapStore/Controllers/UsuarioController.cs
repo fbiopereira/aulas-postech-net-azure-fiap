@@ -1,6 +1,8 @@
 ﻿using FiapStore.DTOs;
 using FiapStore.Entities;
+using FiapStore.Enums;
 using FiapStore.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -20,6 +22,8 @@ namespace FiapStore.Controllers
 
         }
 
+      
+        [Authorize(Roles = Permissoes.Administrador)]
         [HttpGet]
         public IActionResult ObterTodosUsuarios()
         {
@@ -27,8 +31,7 @@ namespace FiapStore.Controllers
             
             _logger.LogWarning("Warning listando todos os usuarios");
             try
-            {
-               throw new Exception("Deu Erro");
+            {             
                 return Ok(_usuarioRepository.ObterTodos());
             }
             catch (Exception ex)
@@ -40,6 +43,8 @@ namespace FiapStore.Controllers
             
         }
 
+        [Authorize]
+        [Authorize(Roles = $"{Permissoes.Administrador}, {Permissoes.Funcionario}")]
         [HttpGet("{id:int}/{pedidos:bool=false}")] //Opcao especificando o tipo do parametro
         public IActionResult ObterUsuarioId(int id, bool pedidos = false)
         {
@@ -54,8 +59,9 @@ namespace FiapStore.Controllers
             }
         }
 
-     
 
+        [Authorize]
+        [Authorize(Roles = Permissoes.Administrador)]
         [HttpPost]
         public IActionResult CadastrarUsuario([FromBody] CadastrarUsuarioDTO usuarioDto)
         {
@@ -64,6 +70,8 @@ namespace FiapStore.Controllers
             return Ok("Usuário cadastrado com sucesso");
         }
 
+        [Authorize]
+        [Authorize(Roles = $"{Permissoes.Administrador}, {Permissoes.Funcionario}")]
         [HttpPut]
         public IActionResult AlterarUsuario([FromBody] AlterarUsuarioDTO usuarioDto) //A partir do .Net 7 o FromBody é opcional
         {           
@@ -71,6 +79,8 @@ namespace FiapStore.Controllers
             return Ok("Usuário alterado com sucesso");
         }
 
+        [Authorize]
+        [Authorize(Roles = Permissoes.Administrador)]
         [HttpDelete("{id}")] //Opcao sem especificar o tipo do parametro
         public IActionResult DeleteUsuario(int id)
         {
