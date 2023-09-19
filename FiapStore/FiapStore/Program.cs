@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Diagnostics.Metrics;
+using System.Reflection;
 using System.Reflection.Metadata;
 using System.Text;
 using static System.Net.Mime.MediaTypeNames;
@@ -22,6 +23,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "FiapStore", Version = "v1" });
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
@@ -30,9 +34,9 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "JWT Authorization header - utilizado com Bearer Authentication.\\r\\n\\r\\n" +
+        Description = "JWT Authorization Header - Utilizado com Bearer Authentication.\\r\\n\\r\\n" +
                       "Digite 'Bearer'[espaço] e então seu token no campo abaixo.\\r\\n\\r\\n" +
-                      "Exemplo (sem aspas): \"Bearer 12345abcdef\"",
+                      "Exemplo (desconsiderar aspas): \"Bearer 12345abcdef\" ",
     });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
@@ -99,6 +103,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseReDoc(c =>
+{
+    c.DocumentTitle = "REDOC FiapStore API";
+    c.RoutePrefix = "";
+});
 
 app.UseHttpsRedirection();
 

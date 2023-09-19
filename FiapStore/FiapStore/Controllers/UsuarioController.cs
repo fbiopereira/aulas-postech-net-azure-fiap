@@ -8,6 +8,9 @@ using Microsoft.Extensions.Logging;
 
 namespace FiapStore.Controllers
 {
+    /// <summary>
+    /// Manutenção de Usuários do sistema
+    /// </summary>
     [ApiController]
     [Route("Usuario")]
     public class UsuarioController : Controller
@@ -22,7 +25,17 @@ namespace FiapStore.Controllers
 
         }
 
-      
+        /// <summary>
+        /// Retorna uma lista com todos os usuários cadastrados
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Exemplo de requisição:
+        /// 
+        /// </remarks>
+        /// <response code="200">Retorna lista de usuários</response>
+        /// <response code="401">Usuário não autenticado</response>
+        /// <response code="403">Acesso negado</response>
         [Authorize(Roles = Permissoes.Administrador)]
         [HttpGet]
         public IActionResult ObterTodosUsuarios()
@@ -43,6 +56,12 @@ namespace FiapStore.Controllers
             
         }
 
+        /// <summary>
+        /// Retorna um usuário específico com a opção de retornar pedidos (desligado por padrão)
+        /// </summary>
+        /// <param name="id"> Identificador do usuário</param>
+        /// <param name="pedidos">Flag para solicitar o retorno dos pedidos associados ao usuário</param>
+        /// <returns></returns>
         [Authorize]
         [Authorize(Roles = $"{Permissoes.Administrador}, {Permissoes.Funcionario}")]
         [HttpGet("{id:int}/{pedidos:bool=false}")] //Opcao especificando o tipo do parametro
